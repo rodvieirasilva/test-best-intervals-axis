@@ -73,6 +73,21 @@
                     ctx.lineTo(borderX + axisLineSize, y);
                 }
                 ctx.stroke();
+
+                //Min-max to reference
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = ctx.fillStyle = "rgb(0,0,255)";
+                ctx.fillText(max, maxX - borderTextAxi, minY);
+                ctx.beginPath();
+                ctx.moveTo(borderX - axisLineSize, minY);
+                ctx.lineTo(borderX + axisLineSize, minY);
+                ctx.stroke();
+                ctx.strokeStyle = ctx.fillStyle = "rgb(255,0,0)";
+                ctx.beginPath();
+                ctx.moveTo(borderX - axisLineSize, maxY);
+                ctx.lineTo(borderX + axisLineSize, maxY);
+                ctx.stroke();
+                ctx.fillText(min, maxX, maxY);
             }
             /*
              * Max length of labels in intervals
@@ -108,7 +123,10 @@
             [0, 100, 10],
             [1.001, 1.004, 5],
             [1000000, 1000100, 20],
-            [1.975, 2.66, 5]
+            [1.975, 2.66, 5],
+            [0.975, 0.9755, 10],
+            [100.975, 100.9755, 3],
+            [0, 10, 7]
         ];
         //Render cases
         for (var j = 0; j < testsCases.length; j++) {
