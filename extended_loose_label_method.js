@@ -8,8 +8,10 @@ function extended_loose_label_method(dmin, dmax, pt, Q) {
     var results = [];
     var best = extended_loose_label_method_calc(dmin, dmax, pt, Q);
 
+    nfrac = Math.max(-Math.floor(log10(best.step)), 0);
+
     for (var i = best.min; i <= best.max; i += best.step) {
-        results.push(i.roundTo(4));
+        results.push(i.roundTo(nfrac));
     }
 
     return results;
@@ -19,9 +21,11 @@ function extended_loose_label_method(dmin, dmax, pt, Q) {
 function extended_loose_label_method_calc(dmin, dmax, pt, Q) {
     if (typeof(Q) == 'undefined') {
         Q = [1, 5, 2, 2.5, 4, 3];
+        //Q = [1, 5, 2, 2.5, 4, 3];
     }
     var best = {};
     //w = [0.2, 0.25, 0.5, 0.05]
+    //  var w = [0.25, 0.2, 0.5, 0.05];
     var w = [0.25, 0.2, 0.5, 0.05];
     //result = NULL;
     var result = [];

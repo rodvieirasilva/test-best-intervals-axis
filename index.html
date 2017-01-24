@@ -10,6 +10,7 @@
     <script src="loose_label_method.js"></script>
     <script src="simple_min_max_method.js"></script>
     <script src="extended_loose_label_method.js"></script>
+    <script src="simple_adjusts_method.js"></script>
 
     <script>
         function test(descr, idFunc, testCase, min, max, steps) {
@@ -99,8 +100,8 @@
         }
 
         //Methods
-        var decFuncs = ['Simple min-max', 'Loose label', 'Extended Loose'];
-        var funcs = [simple_min_max_method, loose_label_method, extended_loose_label_method];
+        var decFuncs = ['Simple min-max', 'Loose label', 'Extended Loose', 'Simple Adjusts Method'];
+        var funcs = [simple_min_max_method, loose_label_method, extended_loose_label_method, simple_adjusts_method];
 
         createH2('Simple Tests - best interval in the graph')
         var testsCases = [
