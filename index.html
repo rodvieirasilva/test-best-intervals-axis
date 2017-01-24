@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<body style="background-color: DarkGray">
+    <div id="content">
+
+    </div>
+    <script src="ui_utils.js"></script>
+    <script src="best_intervals_utils.js"></script>
+    <script src="loose_label_method.js"></script>
+    <script src="simple_min_max_method.js"></script>
+    <script src="extended_loose_label_method.js"></script>
+
+    <script>
+        function test(descr, idFunc, testCase, min, max, steps) {
+
+            createTestUI(descr, idFunc, testCase);
+            c = document.getElementById(returnIdCanvas(idFunc, testCase));
+            ctx = c.getContext("2d");
+            var maxWidth = 400;
+            var maxHeight = 400;
+            var borderY = 60;
+            var maxY = maxHeight - borderY;
+            var minY = borderY;
+
+            ctx.canvas.width = maxWidth;
+            ctx.canvas.height = maxHeight;
+
+            /*
+             * Convert intervals to object drawable
+             */
+            function intervalsToDrawable(intervals) {
+                var results = [];
+                for (var i = 0; i < intervals.length; i++) {
+                    results.push({
+                        realValue: intervals[i],
+                        relativeY: relativeToReal(intervals[i], min, max)
+                    });
+                }
+                return results;
+            }
+
+            function drawIntervals(intervals) {
+
+                var borderTextAxi = 5;
+                var maxLeng = maxLength(intervals);
+                var borderX = 20 + maxLeng;
+                var axisLineSize = 4;
+                var maxX = maxWidth - borderX;
+                var minX = borderX;
+
+                //axis
+                ctx.beginPath();
+                ctx.moveTo(borderX, borderY);
+                ctx.lineTo(borderX, maxY);
+                ctx.lineTo(maxX, maxY);
+                //ctx.lineTo(maxX, borderY);
+                var txtWidth = ctx.measureText(descr).width;
+                ctx.font = "32px Arial";
+                ctx.fillText(descr, borderX + 10, maxHeight / 2);
+
+                ctx.font = "12px Arial";
+
+                for (var i = 0; i < intervals.length; i++) {
+                    var interval = intervals[i];
+
+                    var y = interval.relativeY;
+
+                    ctx.fillText(interval.realValue, borderTextAxi, y);
+
+                    ctx.moveTo(borderX - axisLineSize, y);
+                    ctx.lineTo(borderX + axisLineSize, y);
+                }
+                ctx.stroke();
+            }
+            /*
+             * Max length of labels in intervals
+             */
+            function maxLength(intervals) {
+                var result = 0;
+                for (var i = 0; i < intervals.length; i++) {
+                    var tmp = ctx.measureText(intervals[i].realValue.toString()).width;
+                    if (result < tmp)
+                        result = tmp;
+                }
+                return result;
+            }
+            /*
+             * Convert coordenates
+             */
+            function relativeToReal(value, min, max) {
+                //Inverse
+                percent = 1 - (value - min) / (max - min);
+                return percent * (maxY - minY) + minY;
+            }
+
+            var intervals = funcs[idFunc](min, max, steps);
+            drawIntervals(intervalsToDrawable(intervals));
+        }
+
+        //Methods
+        var decFuncs = ['Simple min-max', 'Loose label', 'Extended Loose'];
+        var funcs = [simple_min_max_method, loose_label_method, extended_loose_label_method];
+
+        createH2('Simple Tests - best interval in the graph')
+        var testsCases = [
+            [0, 100, 10],
+            [1.001, 1.004, 5],
+            [1000000, 1000100, 20],
+            [1.975, 2.66, 5]
+        ];
+        //Render cases
+        for (var j = 0; j < testsCases.length; j++) {
+            createH3('Test ' + j + ' - Params: min = ' +
+                testsCases[j][0] + ', max = ' + testsCases[j][1] + ', steps =' + testsCases[j][2]);
+            for (var i = 0; i < funcs.length; i++) {
+                test(decFuncs[i], i, j, testsCases[j][0], testsCases[j][1], testsCases[j][2]);
+            }
+        }
+    </script>
+
+
+    <style>
+
+    </style>
+</body>
+
+</html>
